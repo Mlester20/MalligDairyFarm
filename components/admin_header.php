@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="home.php">
-            <i class="fas fa-home"></i> Mallig Dairy Cooperative Farm
+            Mallig Dairy Cooperative Farm Records
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="home.php">
+                    <a class="nav-link" aria-current="page" href="home.php">
                         <i class="fas fa-home"></i> Home
                     </a>
                 </li>
@@ -18,7 +18,9 @@
                         <i class="fas fa-folder"></i> Entries
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="entriesDropdown">
-                        <li><a class="dropdown-item" href="manage_users.php"><i class="fas fa-users"></i> Manage Users</a></li>
+                        <li><a class="dropdown-item" href="manage_users.php"><i class="fas fa-users me-2"></i> Manage Users</a></li>
+                        <li><a class="dropdown-item" href="records.php"><i class="fas fa-book me-2"></i> Manage Records</a></li>
+                        <li><a class="dropdown-item" href="manage_stocks.php"><i class="fas fa-cow me-2"></i> Manage Stocks</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
