@@ -2,10 +2,72 @@
 session_start();
 include '../components/config.php';
 
-//function to check if the user isn't logged in
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../index.php');
     exit;
+}
+
+// Fetch data for milk records by livestock
+$query = "
+    SELECT 
+        l.live_stock_name,
+        SUM(r.quantity) AS total_quantity 
+    FROM 
+        milk_records r
+    INNER JOIN 
+        live_stocks l 
+    ON 
+        r.live_stock_id = l.id
+    GROUP BY 
+        l.live_stock_name
+    ORDER BY 
+        total_quantity DESC
+    LIMIT 5
+";
+
+$result = $con->query($query);
+
+$pieData = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $pieData[$row['live_stock_name']] = $row['total_quantity'];
+    }
+}
+
+// Fetch monthly milk production data
+$monthlyQuery = "
+    SELECT 
+        MONTHNAME(record_date) AS month, 
+        SUM(quantity) AS total_quantity 
+    FROM 
+        milk_records 
+    GROUP BY 
+        MONTH(record_date)
+    ORDER BY 
+        MONTH(record_date)
+";
+
+$monthlyResult = $con->query($monthlyQuery);
+
+$months = [];
+$quantities = [];
+if ($monthlyResult->num_rows > 0) {
+    while ($row = $monthlyResult->fetch_assoc()) {
+        $months[] = $row['month'];
+        $quantities[] = $row['total_quantity'];
+    }
+}
+
+// Fetch total users and admins
+$userQuery = "SELECT role, COUNT(*) AS count FROM users GROUP BY role";
+$userResult = $con->query($userQuery);
+
+$userCounts = ['admin' => 0, 'user' => 0];
+if ($userResult->num_rows > 0) {
+    while ($row = $userResult->fetch_assoc()) {
+        $userCounts[$row['role']] = $row['count'];
+    }
 }
 ?>
 
@@ -14,24 +76,159 @@ if (!isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> <?php include '../components/title.php'; ?> - Home </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/fontawesome.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
+    <title> <?php include '../components/title.php'; ?> - Dashboard </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style/header.css">
 </head>
 <body>
 
     <?php include '../components/admin_header.php'; ?>    
 
+    <div class="container mt-4">
+        <h4 class="text-center text-muted mb-4">Milk Records Analysis</h3>
+
+        <div class="dashboard-container">
+            <!-- Left panel with graph -->
+            <div class="left-panel">
+                <div class="graph-container">
+                    <h5 class="mb-4 text-center">Milk Production Graph</h5>
+                    <canvas id="lineChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+
+            <!-- Right panel with pie chart and cards -->
+            <div class="right-panel">
+                <!-- Pie Chart -->
+                <div class="pie-chart-container">
+                    <h5 class="mb-4 text-center">Stock Milk Distribution</h5>
+                    <canvas id="pieChart" style="max-height: 200px;"></canvas>
+                    <div class="legend mt-3">
+                        <ul>
+                            <?php foreach ($pieData as $name => $quantity): ?>
+                                <li>
+                                    <span style="background-color: rgba(54, 162, 235, 0.7);"></span>
+                                    <?php echo $name; ?>: <?php echo $quantity; ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cards Section -->
+                <div class="cards-container">
+                    <!-- Total Users -->
+                    <div class="stats-card bg-primary">
+                        <div class="stats-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h5>Total Users</h5>
+                        <div class="stats-value">
+                            <?php echo $userCounts['user']; ?>
+                        </div>
+                    </div>
+
+                    <!-- Total Admins -->
+                    <div class="stats-card bg-success">
+                        <div class="stats-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h5>Total Admins</h5>
+                        <div class="stats-value">
+                            <?php echo $userCounts['admin']; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- footer -->
-     <?php include '../components/footer.php'; ?>
+    <?php include '../components/footer.php'; ?>
 
     <!-- for scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
+    <script>
+        // Line Chart Data
+        const lineChartData = {
+            labels: <?php echo json_encode($months); ?>, // Dynamic months
+            datasets: [{
+                label: 'Milk Production (Liters)',
+                data: <?php echo json_encode($quantities); ?>, // Dynamic quantities
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 2,
+                tension: 0.4
+            }]
+        };
+
+        // Render Line Chart
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: lineChartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Months'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Liters'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Pie Chart Data
+        const pieChartData = {
+            labels: <?php echo json_encode(array_keys($pieData)); ?>,
+            datasets: [{
+                data: <?php echo json_encode(array_values($pieData)); ?>,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(75, 192, 112, 0.7)',
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Render Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: pieChartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // Hide default legend
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

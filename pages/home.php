@@ -20,6 +20,8 @@ if (!isset($_SESSION['user_id'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
         /* Make the Select2 dropdown fit with Bootstrap styling */
         .select2-container--default .select2-selection--single {
@@ -57,7 +59,7 @@ if (!isset($_SESSION['user_id'])) {
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Live Stock</th>
                     <th>Date</th>
                     <th>Quantity (Liters)</th>
@@ -188,7 +190,6 @@ if (!isset($_SESSION['user_id'])) {
                         data.forEach(function (record) {
                             tableContent += `
                                 <tr>
-                                    <td>${record.id}</td>
                                     <td>${record.live_stock_name} (${record.live_stock_code})</td>
                                     <td>${record.record_date}</td>
                                     <td>${record.quantity}</td>

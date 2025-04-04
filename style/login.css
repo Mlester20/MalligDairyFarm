@@ -1,0 +1,58 @@
+
+    body {
+        background-color: #48A6A7;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .header {
+        background: linear-gradient(to right, #66bb6a, #43a047); /* soft green gradient */
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .header .title {
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .header .date-time {
+        font-size: 16px;
+        font-weight: 400;
+        color: #f1f1f1;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        white-space: nowrap;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        font-size: 24px;
+    }
+    
+    .form-control:focus {
+        border-color: #ccc;
+        box-shadow: 0 0 0 0.2rem rgba(67, 160, 71, 0.25);
+    }
+    
+    .btn-success {
+        background-color: #43a047;
+        border: none;
+    }
+    
+    .btn-success:hover {
+        background-color: #388e3c;
+    }
+    /* Make placeholder text smaller */
+    .form-floating > .form-control::placeholder {
+        font-size: 0.875rem; /* Makes placeholder text smaller (14px if base is 16px) */
+    }
+    
+    /* Also adjust the floating label size for consistency */
+    .form-floating > label {
+        font-size: 0.875rem;
+    }

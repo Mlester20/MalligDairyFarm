@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg custom-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="home.php">
             Mallig Dairy Cooperative Farm Records
@@ -13,14 +13,14 @@
                         <i class="fas fa-home"></i> Home
                     </a>
                 </li>
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="entriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-folder me-2"></i>Records
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="entriesDropdown">
+                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="entriesDropdown">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-book me-2"></i> All Records</a></li>
-                    </ul>
-                </li>
+                    </ul> 
+                </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user"></i> <?php echo htmlspecialchars($_SESSION['name'] ?? 'User'); ?>

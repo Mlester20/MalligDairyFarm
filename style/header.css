@@ -1,0 +1,31 @@
+.custom-navbar {
+    background-color: #162d50; /* Softer dark blue */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* Subtle white border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Softer shadow */
+}
+
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link,
+.custom-navbar .dropdown-toggle {
+    color: #eee !important; 
+    font-weight: 500;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .dropdown-menu a:hover {
+    color: #ffdd66 !important; /* Soft gold on hover */
+}
+
+.custom-navbar .dropdown-menu {
+    background-color: rgba(22, 45, 80, 0.95); /* Slightly lighter dark blue dropdown */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-navbar .dropdown-item {
+    color: #e0e0e0;
+}
+
+.custom-navbar .dropdown-item:hover {
+    background-color: rgba(255, 221, 102, 0.15); /* Lighter gold hover */
+    color: #ffdd66;
+}

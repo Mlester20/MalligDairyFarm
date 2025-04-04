@@ -61,17 +61,30 @@ $total_pages = ceil($total_records / $records_per_page);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> <?php include '../components/title.php'; ?> - Records </title>
+    <title>Dairy Farm Records</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style/search.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="../style/header.css">
 </head>
 <body>
     <?php include '../components/admin_header.php'; ?>
 
     <div class="container mt-5">
-        <h3 class="mb-4 text-center text-muted">Records</h3>
-        <table class="table table-bordered table-striped">
+        <h3 class="mb-4 text-center text-muted">Dairy Farm Records</h3>
+
+        <!-- Action Buttons -->
+        <div class="mb-3 d-flex justify-content-end">
+            <button id="exportExcel" class="btn btn-success me-2">
+                <i class="fas fa-file-excel"></i> Export to Excel
+            </button>
+            <button id="printPage" class="btn btn-primary">
+                <i class="fas fa-print"></i> Print
+            </button>
+        </div>
+
+        <table class="table table-bordered table-striped" id="recordsTable">
             <thead>
                 <tr>
                     <th>#</th>
@@ -79,7 +92,7 @@ $total_pages = ceil($total_records / $records_per_page);
                     <th>Stock Name</th>
                     <th>Stock Code</th>
                     <th>Milk Quantity</th>
-                    <th>Record Date</th>
+                    <th>Recorded Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -126,11 +139,68 @@ $total_pages = ceil($total_records / $records_per_page);
         </nav>
     </div>
 
-    <!-- for footer -->
+    <?php include '../components/footer.php'; ?>
+
+    <!-- Scripts for Export and Print -->
+    <script>
+        // Export to Excel
+        document.getElementById('exportExcel').addEventListener('click', function () {
+            const table = document.getElementById('recordsTable');
+            let tableHTML = '<table border="1">';
+            tableHTML += '<tr><th>Stock Name</th><th>Stock Code</th><th>Milk Quantity</th><th>Recorded Date</th></tr>';
+
+            // Loop through table rows and extract relevant data
+            Array.from(table.querySelectorAll('tbody tr')).forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 0) {
+                    tableHTML += `<tr>
+                        <td>${cells[2].innerText}</td>
+                        <td>${cells[3].innerText}</td>
+                        <td>${cells[4].innerText}</td>
+                        <td>${cells[5].innerText}</td>
+                    </tr>`;
+                }
+            });
+
+            tableHTML += '</table>';
+            const filename = 'milk_records.xls';
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML);
+            downloadLink.download = filename;
+            downloadLink.click();
+        });
+
+        // Print Page
+        document.getElementById('printPage').addEventListener('click', function () {
+            const table = document.getElementById('recordsTable');
+            let printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Dairy Farm Records</title></head><body>');
+            printWindow.document.write('<h3 style="text-align: center;">Dairy Farm Records</h3>');
+            printWindow.document.write('<table border="1" style="width: 100%; border-collapse: collapse;">');
+            printWindow.document.write('<tr><th>Stock Name</th><th>Stock Code</th><th>Milk Quantity</th><th>Recorded Date</th></tr>');
+
+            // Loop through table rows and extract relevant data
+            Array.from(table.querySelectorAll('tbody tr')).forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 0) {
+                    printWindow.document.write(`<tr>
+                        <td>${cells[2].innerText}</td>
+                        <td>${cells[3].innerText}</td>
+                        <td>${cells[4].innerText}</td>
+                        <td>${cells[5].innerText}</td>
+                    </tr>`);
+                }
+            });
+
+            printWindow.document.write('</table></body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+    </script>
 
     <!-- scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
