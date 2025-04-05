@@ -1,0 +1,44 @@
+        .graph-container, .pie-chart-container {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stats-card {
+            flex: 1;
+            border-radius: 8px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stats-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .left-panel, .right-panel {
+                flex: 1 1 100%; /* Full width on smaller screens */
+            }
+
+            .cards-container {
+                flex-direction: column; /* Stack cards vertically on mobile */
+            }
+        }

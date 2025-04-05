@@ -67,6 +67,7 @@ $total_pages = ceil($total_records / $records_per_page);
     <link rel="stylesheet" href="../style/search.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="../style/header.css">
+
 </head>
 <body>
     <?php include '../components/admin_header.php'; ?>
@@ -93,6 +94,7 @@ $total_pages = ceil($total_records / $records_per_page);
                     <th>Stock Code</th>
                     <th>Milk Quantity</th>
                     <th>Recorded Date</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,6 +107,11 @@ $total_pages = ceil($total_records / $records_per_page);
                             <td><?php echo htmlspecialchars($record['live_stock_code']); ?></td>
                             <td><?php echo htmlspecialchars($record['quantity']); ?></td>
                             <td><?php echo htmlspecialchars($record['record_date']); ?></td>
+                            <td>
+                                <button class="btn btn-danger btn-sm delete-record" data-id="<?php echo $record['record_id']; ?>">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -140,6 +147,12 @@ $total_pages = ceil($total_records / $records_per_page);
     </div>
 
     <?php include '../components/footer.php'; ?>
+
+
+    <!-- scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <!-- Scripts for Export and Print -->
     <script>
@@ -199,8 +212,36 @@ $total_pages = ceil($total_records / $records_per_page);
         });
     </script>
 
-    <!-- scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- script for delete -->
+    <script>
+            $(document).ready(function () {
+                // Handle delete button click
+                $('.delete-record').on('click', function () {
+                    const recordId = $(this).data('id');
+                    const row = $(`#record-${recordId}`);
+
+                    if (confirm('Are you sure you want to delete this record?')) {
+                        $.ajax({
+                            url: '../controllers/recordsController.php', // Update with the correct path
+                            type: 'POST',
+                            data: { action: 'delete', id: recordId },
+                            success: function (response) {
+                                const res = JSON.parse(response);
+                                if (res.success) {
+                                    row.remove();
+                                    alert('Record deleted successfully.');
+                                } else {
+                                    alert('Failed to delete the record.');
+                                }
+                            },
+                            error: function () {
+                                alert('An error occurred while deleting the record.');
+                            }
+                        });
+                    }
+                });
+            });
+    </script>
+
 </body>
 </html>

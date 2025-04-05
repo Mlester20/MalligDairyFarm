@@ -104,14 +104,13 @@ if (isset($_POST['update_profile'])) {
                                 <label for="confirm_password" class="form-label">Confirm New Password</label>
                                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm new password">
                             </div>
-                            <div class="d-grid">
-                                <button type="submit" name="update_profile" class="btn btn-success">Update Profile</button>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" name="update_profile" class="btn btn-success btn-sm">Update Profile</button>
+                                <a href="home.php" class="btn btn-secondary btn-sm">Back to Home</a>
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer text-center">
-                        <a href="home.php" class="btn btn-secondary">Back to Home</a>
-                    </div>
+                   
                 </div>
             </div>
         </div>

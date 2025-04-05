@@ -1,10 +1,10 @@
 <nav class="navbar navbar-expand-lg custom-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="home.php">
+        <a class="navbar-brand" id="navbarTitle" href="home.php">
             Mallig Dairy Cooperative Farm Records
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
@@ -38,3 +38,18 @@
         </div>
     </div>
 </nav>
+
+<script>
+    // Function to update the navbar title based on screen size
+    function updateNavbarTitle() {
+        const navbarTitle = document.getElementById('navbarTitle');
+        if (window.innerWidth <= 768) {
+            navbarTitle.textContent = 'Dairy Farm'; // Mobile view title
+        } else {
+            navbarTitle.textContent = 'Mallig Dairy Cooperative Farm Records'; 
+        }
+    }
+    updateNavbarTitle();
+
+    window.addEventListener('resize', updateNavbarTitle);
+</script>

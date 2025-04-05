@@ -2,7 +2,7 @@
 session_start();
 include '../components/config.php';
 
-//function to check if the user isn't logged in
+// Function to check if the user isn't logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../index.php');
     exit;
@@ -16,14 +16,11 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> <?php include '../components/title.php'; ?> - Home </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/fontawesome.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style/header.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
-        /* Make the Select2 dropdown fit with Bootstrap styling */
         .select2-container--default .select2-selection--single {
             height: 38px;
             border: 1px solid #ced4da;
@@ -35,9 +32,6 @@ if (!isset($_SESSION['user_id'])) {
         }
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 24px;
-            padding-left: 0;
-        }
-        .select2-container .select2-selection--single .select2-selection__rendered {
             padding-left: 0;
         }
         .select2-dropdown {
@@ -59,7 +53,6 @@ if (!isset($_SESSION['user_id'])) {
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <!-- <th>ID</th> -->
                     <th>Live Stock</th>
                     <th>Date</th>
                     <th>Quantity (Liters)</th>
@@ -96,7 +89,7 @@ if (!isset($_SESSION['user_id'])) {
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="record_date" class="form-label">Date</label>
+                            <label for="record_date" class="form-label">Record Date</label>
                             <input type="date" class="form-control" id="record_date" name="record_date" required>
                         </div>
                         <div class="mb-3">
@@ -113,8 +106,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </div>
 
-  
-     <!-- Edit Milk Record Modal -->
+    <!-- Edit Milk Record Modal -->
     <div class="modal fade" id="editMilkRecordModal" tabindex="-1" aria-labelledby="editMilkRecordModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -128,7 +120,7 @@ if (!isset($_SESSION['user_id'])) {
                         <div class="mb-3">
                             <label for="edit_live_stock_id" class="form-label">Stocks Name</label>
                             <select class="form-select select2-dropdown" id="edit_live_stock_id" name="live_stock_id" required>
-                                <option value="" disabled selected>Select Stock Name</option>
+                                <option value="" disabled>Select Stock Name</option>
                                 <?php
                                 $query = "SELECT * FROM live_stocks";
                                 $result = mysqli_query($con, $query);
@@ -157,7 +149,7 @@ if (!isset($_SESSION['user_id'])) {
     </div>
 
     <!-- footer -->
-     <?php include '../components/footer.php'; ?>
+    <?php include '../components/footer.php'; ?>
 
     <!-- for scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -166,18 +158,20 @@ if (!isset($_SESSION['user_id'])) {
 
     <script>
         $(document).ready(function () {
-            // Initialize Select2 for searchable dropdown
+            // Initialize Select2 for add form dropdown
             $('.select2-dropdown').select2({
-                dropdownParent: $('#addMilkRecordModal'), // This ensures the dropdown appears properly in the modal
+                dropdownParent: $('#addMilkRecordModal'),
+                placeholder: "Search or select stock",
+                allowClear: true
+            });
+            
+            // Initialize Select2 for edit form dropdown
+            $('#edit_live_stock_id').select2({
+                dropdownParent: $('#editMilkRecordModal'),
                 placeholder: "Search and select stock",
                 allowClear: true
             });
 
-            // Make sure Select2 resets properly when the modal is closed
-            $('#addMilkRecordModal').on('hidden.bs.modal', function () {
-                $('.select2-dropdown').val(null).trigger('change');
-            });
-            
             // Function to load milk records
             function loadMilkRecords() {
                 $.ajax({
@@ -194,7 +188,12 @@ if (!isset($_SESSION['user_id'])) {
                                     <td>${record.record_date}</td>
                                     <td>${record.quantity}</td>
                                     <td>
-                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${record.id}">Delete</button>
+                                        <button class="btn btn-warning btn-sm edit-btn" data-id="${record.id}" data-bs-toggle="modal" data-bs-target="#editMilkRecordModal">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${record.id}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             `;
@@ -227,6 +226,59 @@ if (!isset($_SESSION['user_id'])) {
                     },
                     error: function (xhr, status, error) {
                         console.error('Error adding milk record:', error);
+                        alert('Error adding milk record: ' + error);
+                    }
+                });
+            });
+
+            // Handle Edit Button Click - Load record data into the edit modal
+            $(document).on('click', '.edit-btn', function () {
+                const id = $(this).data('id');
+                
+                // Fetch the record details using AJAX
+                $.ajax({
+                    url: '../controllers/milk_recordsController.php',
+                    method: 'GET',
+                    data: { id: id, action: 'fetch_single' },
+                    dataType: 'json',
+                    success: function (record) {
+                        // Populate the edit modal fields with the record data
+                        $('#edit_record_id').val(record.id);
+                        
+                        // Set the live stock select value and trigger change for Select2
+                        $('#edit_live_stock_id').val(record.live_stock_id).trigger('change');
+                        
+                        $('#edit_record_date').val(record.record_date);
+                        $('#edit_quantity').val(record.quantity);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching record details:', error);
+                        alert('Error fetching record details: ' + error);
+                    }
+                });
+            });
+            
+            // Handle Edit Milk Record Form Submission
+            $('#editMilkRecordForm').on('submit', function (e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+                
+                $.ajax({
+                    url: '../controllers/milk_recordsController.php',
+                    method: 'POST',
+                    data: formData + '&action=edit',
+                    success: function (response) {
+                        if (response === 'success') {
+                            alert('Milk record updated successfully!');
+                            $('#editMilkRecordModal').modal('hide');
+                            loadMilkRecords();
+                        } else {
+                            alert('Error updating record: ' + response);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating milk record:', error);
+                        alert('Error updating milk record: ' + error);
                     }
                 });
             });
@@ -245,15 +297,12 @@ if (!isset($_SESSION['user_id'])) {
                         },
                         error: function (xhr, status, error) {
                             console.error('Error deleting milk record:', error);
+                            alert('Error deleting milk record: ' + error);
                         }
                     });
                 }
             });
-
-
-
         });
     </script>
-    
 </body>
 </html>

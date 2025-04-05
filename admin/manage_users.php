@@ -71,6 +71,7 @@ if (isset($_POST['edit_user'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="../style/header.css">
 </head>
 <body>
@@ -102,9 +103,13 @@ if (isset($_POST['edit_user'])) {
                         <!-- <td><?php echo htmlspecialchars($row['password']); ?></td> -->
                         <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                         <td><?php echo htmlspecialchars($row['role']); ?></td>
-                        <td>
-                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $row['user_id']; ?>">Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteUser(<?php echo $row['user_id']; ?>)">Delete</button>
+                        <td class="d-flex justify-content-center align-items-center gap-2">
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal<?php echo $row['user_id']; ?>">
+                                <i class="fas fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteUser(<?php echo $row['user_id']; ?>)">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
 

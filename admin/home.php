@@ -83,6 +83,7 @@ if ($userResult->num_rows > 0) {
     <link rel="stylesheet" href="../style/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="../style/header.css">
+    <link rel="stylesheet" href="../style/dashboard_responsive.css">
 </head>
 <body>
 

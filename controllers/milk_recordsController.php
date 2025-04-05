@@ -17,6 +17,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['action'] === 'fetch') {
     exit;
 }
 
+// Fetch a single milk record for editing
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['action'] === 'fetch_single') {
+    $id = $_GET['id'];
+    
+    $query = "SELECT * FROM milk_records WHERE id = ?";
+    $stmt = mysqli_prepare($con, $query);
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $record = mysqli_fetch_assoc($result);
+    
+    echo json_encode($record);
+    exit;
+}
+
 // Add a new milk record
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'add') {
     $live_stock_id = $_POST['live_stock_id'];
@@ -43,19 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'add') {
     exit;
 }
 
-// Delete a milk record
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'delete') {
-    $id = $_POST['id'];
-
-    $query = "DELETE FROM milk_records WHERE id = ?";
-    $stmt = mysqli_prepare($con, $query);
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    mysqli_stmt_execute($stmt);
-    echo 'success';
-    exit;
-}
-
-// Edit an existing milk record
+// Update a milk record
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'edit') {
     $id = $_POST['id'];
     $live_stock_id = $_POST['live_stock_id'];
@@ -65,6 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'edit') {
     $query = "UPDATE milk_records SET live_stock_id = ?, record_date = ?, quantity = ? WHERE id = ?";
     $stmt = mysqli_prepare($con, $query);
     mysqli_stmt_bind_param($stmt, "isdi", $live_stock_id, $record_date, $quantity, $id);
+    
+    if (mysqli_stmt_execute($stmt)) {
+        echo 'success';
+    } else {
+        echo "Update failed: (" . mysqli_stmt_errno($stmt) . ") " . mysqli_stmt_error($stmt);
+    }
+    exit;
+}
+
+// Delete a milk record
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'delete') {
+    $id = $_POST['id'];
+
+    $query = "DELETE FROM milk_records WHERE id = ?";
+    $stmt = mysqli_prepare($con, $query);
+    mysqli_stmt_bind_param($stmt, "i", $id);
     mysqli_stmt_execute($stmt);
     echo 'success';
     exit;

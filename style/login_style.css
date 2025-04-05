@@ -1,0 +1,111 @@
+body {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Prevent scrolling issues */
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(1px); /* Apply blur only to the background image */
+    z-index: -1; /* Ensure it stays behind all content */
+}
+
+.header {
+    background: linear-gradient(to right, rgb(41, 51, 42), rgb(86, 97, 87)); 
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header .title {
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.header .date-time {
+    font-size: 16px;
+    font-weight: 400;
+    color: #f1f1f1;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.9); /* Transparent white background */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1; /* Ensure it stays above the blurred background */
+    padding: 20px;
+}
+
+.card-header h5 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent input fields */
+    border: 1px solid #ccc;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Make placeholder text smaller */
+.form-floating > .form-control::placeholder {
+    font-size: 0.875rem; 
+}
+
+.form-floating > label {
+    font-size: 0.875rem;
+}
+
+@media (max-width: 767.98px) {
+    .header {
+        padding: 12px;
+        justify-content: flex-start; /* Align content to the left */
+        text-align: left; /* Ensure text aligns to the left */
+    }
+
+    .mobile-title {
+        display: block;
+        text-align: left; /* Align the title text to the left */
+    }
+
+    .desktop-title {
+        display: none;
+    }
+
+    .card {
+        margin: 20px;
+    }
+}
