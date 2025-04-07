@@ -4,7 +4,7 @@ session_start(); // Ensure session is started to access $_SESSION['user_id']
 
 // Fetch milk records
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['action'] === 'fetch') {
-    $query = "SELECT mr.id, mr.record_date, mr.quantity, ls.live_stock_name, ls.live_stock_code, u.username 
+    $query = "SELECT mr.id, mr.recorded_at, mr.quantity, ls.live_stock_name, ls.live_stock_code, u.username 
               FROM milk_records mr 
               JOIN live_stocks ls ON mr.live_stock_id = ls.id
               JOIN users u ON mr.user_id = u.user_id"; // Join with users table to get the username

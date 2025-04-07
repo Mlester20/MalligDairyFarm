@@ -7,6 +7,21 @@ if (!isset($_SESSION['user_id'])) {
     header('location: ../index.php');
     exit;
 }
+
+$limit = 5; // Number of entries per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+// Get the total number of records
+$query = "SELECT COUNT(*) FROM live_stocks";
+$result = mysqli_query($con, $query);
+$total_records = mysqli_fetch_array($result)[0];
+$total_pages = ceil($total_records / $limit);
+
+// Get the live stock records with pagination
+$query = "SELECT * FROM live_stocks LIMIT $limit OFFSET $offset";
+$result = mysqli_query($con, $query);
+$live_stocks = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -15,14 +30,13 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Live Stocks</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/fontawesome.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7xj1z2l4c5e5e5e5e5e5e5e5e5e5e5e5" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="../style/header.css">
+    <link rel="stylesheet" href="../style/dashboard_responsive.css">
     <link rel="icon" href="../images/favi.png" type="image/png">
 </head>
 <body>
@@ -30,8 +44,11 @@ if (!isset($_SESSION['user_id'])) {
     <?php include '../components/admin_header.php'; ?>
 
     <div class="container mt-5">
-        <h3 class="text-center mb-4 text-muted">Manage Live Stocks</h3>
+        <h3 class="text-center mb-4 text-muted"><i class="fas fa-magnifying-glass">Manage Live Stocks</i></h3>
         <div class="row mb-3">
+            <div class="col-md-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search Live Stocks...">
+            </div>
             <div class="col text-end">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLiveStockModal">Add Live Stock</button>
             </div>
@@ -47,9 +64,41 @@ if (!isset($_SESSION['user_id'])) {
                 </tr>
             </thead>
             <tbody id="liveStockTable">
-                <!-- Live stock records will be dynamically loaded -->
+                <?php foreach ($live_stocks as $stock): ?>
+                    <tr>
+                        <td><?php echo $stock['id']; ?></td>
+                        <td><?php echo $stock['live_stock_name']; ?></td>
+                        <td><?php echo $stock['live_stock_code']; ?></td>
+                        <td><?php echo $stock['created_at']; ?></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm edit-btn" data-id="<?php echo $stock['id']; ?>" data-name="<?php echo $stock['live_stock_name']; ?>" data-code="<?php echo $stock['live_stock_code']; ?>"><i class="fas fa-pencil"></i></button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="<?php echo $stock['id']; ?>"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
+                    <a class="page-link" href="?page=<?php echo $page - 1; ?>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+                <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
+                    <a class="page-link" href="?page=<?php echo $page + 1; ?>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <!-- Add Live Stock Modal -->
@@ -113,42 +162,9 @@ if (!isset($_SESSION['user_id'])) {
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/search_stocks.js"></script>
     <script>
         $(document).ready(function () {
-            // Function to load live stock records
-            function loadLiveStocks() {
-                $.ajax({
-                    url: '../controllers/save_stocksController.php',
-                    method: 'GET',
-                    data: { action: 'fetch' },
-                    dataType: 'json',
-                    success: function (data) {
-                        let tableContent = '';
-                        data.forEach(function (stock) {
-                            tableContent += `
-                                <tr>
-                                    <td>${stock.id}</td>
-                                    <td>${stock.live_stock_name}</td>
-                                    <td>${stock.live_stock_code}</td>
-                                    <td>${stock.created_at}</td>
-                                    <td>
-                                        <button class="btn btn-warning btn-sm edit-btn" data-id="${stock.id}" data-name="${stock.live_stock_name}" data-code="${stock.live_stock_code}">Edit</button>
-                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${stock.id}">Delete</button>
-                                    </td>
-                                </tr>
-                            `;
-                        });
-                        $('#liveStockTable').html(tableContent);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching live stocks:', error);
-                    }
-                });
-            }
-
-            // Load live stocks on page load
-            loadLiveStocks();
-
             // Handle Add Live Stock Form Submission
             $('#addLiveStockForm').on('submit', function (e) {
                 e.preventDefault();
@@ -161,7 +177,7 @@ if (!isset($_SESSION['user_id'])) {
                         alert('Live stock added successfully!');
                         $('#addLiveStockModal').modal('hide');
                         $('#addLiveStockForm')[0].reset();
-                        loadLiveStocks();
+                        location.reload();
                     },
                     error: function (xhr, status, error) {
                         console.error('Error adding live stock:', error);
@@ -193,7 +209,7 @@ if (!isset($_SESSION['user_id'])) {
                     success: function (response) {
                         alert('Live stock updated successfully!');
                         $('#editLiveStockModal').modal('hide');
-                        loadLiveStocks();
+                        location.reload();
                     },
                     error: function (xhr, status, error) {
                         console.error('Error updating live stock:', error);
@@ -211,7 +227,7 @@ if (!isset($_SESSION['user_id'])) {
                         data: { id: id, action: 'delete' },
                         success: function (response) {
                             alert('Live stock deleted successfully!');
-                            loadLiveStocks();
+                            location.reload();
                         },
                         error: function (xhr, status, error) {
                             console.error('Error deleting live stock:', error);

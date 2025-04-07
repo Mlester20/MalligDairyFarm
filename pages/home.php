@@ -55,7 +55,8 @@ if (!isset($_SESSION['user_id'])) {
             <thead>
                 <tr>
                     <th>Live Stock</th>
-                    <th>Date</th>
+                    <th>Recorded Date</th>
+                    <th>Recorded Time</th>
                     <th>Quantity (Liters)</th>
                     <th>Actions</th>
                 </tr>
@@ -173,6 +174,26 @@ if (!isset($_SESSION['user_id'])) {
                 allowClear: true
             });
 
+
+            // Function to format date and time
+            function formatDate(dateTime) {
+                const date = new Date(dateTime);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            }
+
+            function formatTime(dateTime) {
+                const date = new Date(dateTime);
+                return date.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true // Enables 12-hour format with AM/PM
+                });
+            }
+
             // Function to load milk records
             function loadMilkRecords() {
                 $.ajax({
@@ -186,7 +207,8 @@ if (!isset($_SESSION['user_id'])) {
                             tableContent += `
                                 <tr>
                                     <td>${record.live_stock_name} (${record.live_stock_code})</td>
-                                    <td>${record.record_date}</td>
+                                    <td>${formatDate(record.recorded_at)}</td> <!-- Separate date -->
+                                    <td>${formatTime(record.recorded_at)}</td> <!-- Separate time -->
                                     <td>${record.quantity}</td>
                                     <td>
                                         <button class="btn btn-warning btn-sm edit-btn" data-id="${record.id}" data-bs-toggle="modal" data-bs-target="#editMilkRecordModal">

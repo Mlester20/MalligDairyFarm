@@ -1,41 +1,23 @@
-$(document).ready(function () {
-    // Function to load live stock records
-    function loadLiveStocks(query = '') {
-        $.ajax({
-            url: '../controllers/save_stocksController.php',
-            method: 'GET',
-            data: { action: 'fetch', query: query },
-            dataType: 'json',
-            success: function (data) {
-                let tableContent = '';
-                if (data.length > 0) {
-                    data.forEach(function (stock) {
-                        tableContent += `
-                            <tr>
-                                <td>${stock.id}</td>
-                                <td>${stock.live_stock_name}</td>
-                                <td>${stock.live_stock_code}</td>
-                                <td>${stock.created_at}</td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    tableContent = '<tr><td colspan="4" class="text-center">No records found</td></tr>';
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchInput');
+    const liveStockTable = document.getElementById('liveStockTable');
+
+    searchInput.addEventListener('keyup', function () {
+        const filter = searchInput.value.toLowerCase();
+        const rows = liveStockTable.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            for (let j = 0; j < cells.length - 1; j++) { // Exclude the last column (Actions)
+                if (cells[j] && cells[j].innerText.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
                 }
-                $('#liveStockTable').html(tableContent);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching live stocks:', error);
             }
-        });
-    }
 
-    // Load live stocks on page load
-    loadLiveStocks();
-
-    // Handle search input
-    $('#searchStock').on('keyup', function () {
-        const query = $(this).val();
-        loadLiveStocks(query); // Pass the search query to the loadLiveStocks function
+            rows[i].style.display = match ? '' : 'none';
+        }
     });
 });
