@@ -76,7 +76,7 @@ if (isset($_POST['update_profile'])) {
     
 </head>
 <body>
-    <?php include '../components/admin_header.php'; ?>
+    <?php include '../components/header.php'; ?>
 
     <div class="container mt-5">
         <div class="row justify-content-center">
