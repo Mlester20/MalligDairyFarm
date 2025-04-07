@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg custom-navbar">
     <div class="container-fluid">
+        <img src="../images/remove.png" alt="Mallig Dairy Logo" class="me-3" style="height: 50px;">
         <a class="navbar-brand" href="home.php">
             Mallig Dairy Cooperative Farm Records
         </a>

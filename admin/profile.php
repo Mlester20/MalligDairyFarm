@@ -71,6 +71,7 @@ if (isset($_POST['update_profile'])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style/header.css">
+    <link rel="icon" href="../images/favi.png" type="image/png">
 </head>
 <body>
     <?php include '../components/admin_header.php'; ?>

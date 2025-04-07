@@ -67,7 +67,7 @@ $total_pages = ceil($total_records / $records_per_page);
     <link rel="stylesheet" href="../style/search.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="../style/header.css">
-
+    <link rel="icon" href="../images/favi.png" type="image/png">
 </head>
 <body>
     <?php include '../components/admin_header.php'; ?>
@@ -106,7 +106,7 @@ $total_pages = ceil($total_records / $records_per_page);
                             <td><?php echo htmlspecialchars($record['live_stock_name']); ?></td>
                             <td><?php echo htmlspecialchars($record['live_stock_code']); ?></td>
                             <td><?php echo htmlspecialchars($record['quantity']); ?></td>
-                            <td><?php echo htmlspecialchars($record['record_date']); ?></td>
+                            <td><?php echo htmlspecialchars($record['recorded_at']); ?></td>
                             <td>
                                 <button class="btn btn-danger btn-sm delete-record" data-id="<?php echo $record['record_id']; ?>">
                                     <i class="fas fa-trash"></i>

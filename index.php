@@ -7,16 +7,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style/login_style.css">
+    <!-- favicon -->
+    <link rel="icon" href="images/favi.png" type="image/png">
 </head>
 <body>
 
     <!-- Header -->
-    <div class="header">
+    <div class="header d-flex align-items-center">
+        <img src="images/remove.png" alt="Mallig Dairy Logo" class="me-3" style="height: 50px;">
         <div class="title">
             <span class="desktop-title d-none d-md-block">Mallig Dairy Cooperative Farm Record</span>
             <span class="mobile-title d-md-none">Dairy Farm Records</span>
         </div>
-        <div class="date-time d-none d-md-block" id="currentDateTime"><span>Today is: </span></div>
+        <div class="date-time d-none d-md-block ms-auto" id="currentDateTime"><span>Today is: </span></div>
     </div>
 
     <!-- Login Form -->
