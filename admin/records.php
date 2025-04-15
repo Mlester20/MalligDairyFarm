@@ -92,8 +92,9 @@ $total_pages = ceil($total_records / $records_per_page);
                     <th>Recorded By</th>
                     <th>Stock Name</th>
                     <th>Stock Code</th>
-                    <th>Milk Quantity</th>
-                    <th>Recorded Date</th>
+                    <th>Milk Quantity(Liters)</th>
+                    <th>Recorded Date</th> <!-- New column for date -->
+                    <th>Recorded Time</th> <!-- New column for time -->
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -106,8 +107,12 @@ $total_pages = ceil($total_records / $records_per_page);
                             <td><?php echo htmlspecialchars($record['live_stock_name']); ?></td>
                             <td><?php echo htmlspecialchars($record['live_stock_code']); ?></td>
                             <td><?php echo htmlspecialchars($record['quantity']); ?></td>
-                            <td><?php echo htmlspecialchars($record['recorded_at']); ?></td>
+                            <td><?php echo date('Y-m-d', strtotime($record['recorded_at'])); ?></td> 
+                            <td><?php echo date('h:i A', strtotime($record['recorded_at'])); ?></td> 
                             <td>
+                            <button class="btn btn-warning btn-sm edit-record" data-id="<?php echo $record['record_id']; ?>" data-bs-toggle="modal" data-bs-target="#editRecordModal">
+                                <i class="fas fa-pen"></i>
+                            </button>
                                 <button class="btn btn-danger btn-sm delete-record" data-id="<?php echo $record['record_id']; ?>">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -121,6 +126,50 @@ $total_pages = ceil($total_records / $records_per_page);
                 <?php endif; ?>
             </tbody>
         </table>
+
+        <!-- Edit Record Modal -->
+       
+        <div class="modal fade" id="editRecordModal" tabindex="-1" aria-labelledby="editRecordModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="editRecordForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editRecordModalLabel">Edit Milk Record</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="edit_record_id" name="record_id">
+                            <div class="mb-3">
+                                <label for="edit_live_stock_id" class="form-label">Stock Name</label>
+                                <select class="form-select select2-dropdown" id="edit_live_stock_id" name="live_stock_id" required>
+                                    <option value="" disabled>Select Stock Name</option>
+                                    <?php
+                                    // Fetch live stock names from the database
+                                    $query = "SELECT * FROM live_stocks";
+                                    $result = mysqli_query($con, $query);
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo "<option value='{$row['id']}'>{$row['live_stock_name']} ({$row['live_stock_code']})</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_quantity" class="form-label">Quantity (Liters)</label>
+                                <input type="number" step="0.01" class="form-control" id="edit_quantity" name="quantity" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_record_date" class="form-label">Recorded Date</label>
+                                <input type="date" class="form-control" id="edit_record_date" name="record_date" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <!-- Pagination Links -->
         <nav>
@@ -212,7 +261,7 @@ $total_pages = ceil($total_records / $records_per_page);
         });
     </script>
 
-    <!-- script for delete -->
+    <!-- script for edit and delete -->
     <script>
             $(document).ready(function () {
                 // Handle delete button click
@@ -241,6 +290,62 @@ $total_pages = ceil($total_records / $records_per_page);
                     }
                 });
             });
+
+
+            // Handle edit button click
+            $(document).ready(function () {
+                
+            $(document).on('click', '.edit-record', function () {
+                const recordId = $(this).data('id');
+
+                // Fetch record details using AJAX
+                $.ajax({
+                    url: '../controllers/recordsController.php',
+                    method: 'GET',
+                    data: { id: recordId, action: 'fetch_single' },
+                    dataType: 'json',
+                    success: function (record) {
+                        // Populate the modal fields with the record data
+                        $('#edit_record_id').val(record.record_id);
+                        $('#edit_live_stock_id').val(record.live_stock_id).trigger('change'); // Set dropdown value
+                        $('#edit_quantity').val(record.quantity);
+                        $('#edit_record_date').val(record.record_date);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching record details:', error);
+                        alert('Error fetching record details.');
+                    }
+                });
+            });
+
+            // Handle Edit Form Submission
+            $('#editRecordForm').on('submit', function (e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+
+                // Submit the updated data using AJAX
+                $.ajax({
+                    url: '../controllers/recordsController.php',
+                    method: 'POST',
+                    data: formData + '&action=update',
+                    success: function (response) {
+                        const res = JSON.parse(response);
+                        if (res.success) {
+                            alert('Record updated successfully!');
+                            $('#editRecordModal').modal('hide');
+                            location.reload(); // Reload the page to reflect changes
+                        } else {
+                            alert('Failed to update the record.');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating record:', error);
+                        alert('Error updating record.');
+                    }
+                });
+            });
+        });
+
     </script>
 
 </body>
