@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const cells = rows[i].getElementsByTagName('td');
             let match = false;
 
-            for (let j = 0; j < cells.length - 1; j++) { // Exclude the last column (Actions)
+            for (let j = 0; j < cells.length - 1; j++) { 
                 if (cells[j] && cells[j].innerText.toLowerCase().includes(filter)) {
                     match = true;
                     break;

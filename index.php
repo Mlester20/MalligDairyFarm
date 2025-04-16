@@ -32,7 +32,7 @@
                     </div>
                     
                     <div class="card-body p-3 p-md-4">
-                        <form action="login.php" method="POST">
+                        <form action="controllers/auth.php" method="POST" id="auth">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control rounded-3" id="username" name="username" placeholder="Username" required>
                                 <label for="username">Username</label>
@@ -55,5 +55,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/time.js"></script>
+
 </body>
 </html>
