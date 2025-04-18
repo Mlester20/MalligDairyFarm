@@ -85,6 +85,23 @@ $total_pages = ceil($total_records / $records_per_page);
             </button>
         </div>
 
+        <!-- Add Month and Year Filters -->
+        <div class="mb-3 d-flex justify-content-start">
+            <select id="filterMonth" class="form-select me-2" style="width: auto;">
+                <option value="">Select Month</option>
+                <?php for ($m = 1; $m <= 12; $m++): ?>
+                    <option value="<?php echo $m; ?>"><?php echo date('F', mktime(0, 0, 0, $m, 1)); ?></option>
+                <?php endfor; ?>
+            </select>
+            <select id="filterYear" class="form-select me-2" style="width: auto;">
+                <option value="">Select Year</option>
+                <?php for ($y = date('Y'); $y >= 2000; $y--): ?>
+                    <option value="<?php echo $y; ?>"><?php echo $y; ?></option>
+                <?php endfor; ?>
+            </select>
+            <button id="applyFilter" class="btn btn-secondary">Apply Filter</button>
+        </div>
+
         <table class="table table-bordered table-striped" id="recordsTable">
             <thead>
                 <tr>
@@ -234,24 +251,51 @@ $total_pages = ceil($total_records / $records_per_page);
         });
 
         // Print Page
+        document.getElementById('applyFilter').addEventListener('click', function () {
+            const month = document.getElementById('filterMonth').value;
+            const year = document.getElementById('filterYear').value;
+
+            const rows = document.querySelectorAll('#recordsTable tbody tr');
+            rows.forEach(row => {
+                const dateCell = row.querySelector('td:nth-child(6)');
+                if (dateCell) {
+                    const recordDate = new Date(dateCell.innerText);
+                    const recordMonth = recordDate.getMonth() + 1; // Months are 0-based
+                    const recordYear = recordDate.getFullYear();
+
+                    if (
+                        (month && recordMonth != month) ||
+                        (year && recordYear != year)
+                    ) {
+                        row.style.display = 'none';
+                    } else {
+                        row.style.display = '';
+                    }
+                }
+            });
+        });
+
+        //print function
         document.getElementById('printPage').addEventListener('click', function () {
             const table = document.getElementById('recordsTable');
             let printWindow = window.open('', '', 'height=600,width=800');
             printWindow.document.write('<html><head><title>Dairy Farm Records</title></head><body>');
-            printWindow.document.write('<h3 style="text-align: center;">Dairy Farm Records</h3>');
+            printWindow.document.write('<h2 style="text-align: center;">Dairy Farm Records</h2>');
             printWindow.document.write('<table border="1" style="width: 100%; border-collapse: collapse;">');
             printWindow.document.write('<tr><th>Stock Name</th><th>Stock Code</th><th>Milk Quantity</th><th>Recorded Date</th></tr>');
 
-            // Loop through table rows and extract relevant data
+            // Loop through visible table rows and extract relevant data
             Array.from(table.querySelectorAll('tbody tr')).forEach(row => {
-                const cells = row.querySelectorAll('td');
-                if (cells.length > 0) {
-                    printWindow.document.write(`<tr>
-                        <td>${cells[2].innerText}</td>
-                        <td>${cells[3].innerText}</td>
-                        <td>${cells[4].innerText}</td>
-                        <td>${cells[5].innerText}</td>
-                    </tr>`);
+                if (row.style.display !== 'none') {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length > 0) {
+                        printWindow.document.write(`<tr>
+                            <td>${cells[2].innerText}</td>
+                            <td>${cells[3].innerText}</td>
+                            <td>${cells[4].innerText}</td>
+                            <td>${cells[5].innerText}</td>
+                        </tr>`);
+                    }
                 }
             });
 

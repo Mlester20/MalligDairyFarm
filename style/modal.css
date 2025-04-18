@@ -1,0 +1,19 @@
+/* modal.css */
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 0.75rem;
+}
+
+#profileModal .modal-content {
+    border-radius: 0.3rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+#profileModal .form-label {
+    font-weight: 500;
+}

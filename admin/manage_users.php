@@ -86,7 +86,7 @@ if (isset($_POST['edit_user'])) {
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>User ID</th>
+                    <!-- <th>User ID</th> -->
                     <th>Name</th>
                     <th>Username</th>
                     <!-- <th>Password (MD5)</th> -->
@@ -98,7 +98,7 @@ if (isset($_POST['edit_user'])) {
             <tbody>
                 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                     <tr>
-                        <td><?php echo $row['user_id']; ?></td>
+                        <!-- <td><?php echo $row['user_id']; ?></td> -->
                         <td><?php echo htmlspecialchars($row['name']); ?></td>
                         <td><?php echo htmlspecialchars($row['username']); ?></td>
                         <!-- <td><?php echo htmlspecialchars($row['password']); ?></td> -->
