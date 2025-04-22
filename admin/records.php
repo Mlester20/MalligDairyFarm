@@ -86,6 +86,7 @@ $total_pages = ceil($total_records / $records_per_page);
         </div>
 
         <!-- Add Month and Year Filters -->
+        <h5 class="mb-2 text-start text-muted">Filter Specific Records</h5>
         <div class="mb-3 d-flex justify-content-start">
             <select id="filterMonth" class="form-select me-2" style="width: auto;">
                 <option value="">Select Month</option>

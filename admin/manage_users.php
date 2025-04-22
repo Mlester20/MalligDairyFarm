@@ -80,7 +80,10 @@ if (isset($_POST['edit_user'])) {
 
     <div class="container mt-5">
         <h3 class="text-center">Manage Users</h3>
-        <div class="text-end mb-3">
+        <div class="text-end mb-3 d-flex align-items-center justify-content-end gap-2">
+            <div class="col-md-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search Users...">
+            </div>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add User</button>
         </div>
         <table class="table table-bordered table-striped">
@@ -209,6 +212,8 @@ if (isset($_POST['edit_user'])) {
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- js script to search specific user -->
+    <script src="../js/searchUsers.js"></script>
 </body>
 </html>
 
