@@ -39,7 +39,7 @@ if ($milkInventoryResult && $milkInventoryResult->num_rows > 0) {
     <link rel="icon" href="../images/favi.png" type="image/png">
 </head>
 <body>
-    <?php include '../components/admin_header.php'; ?>
+    <?php include '../components/header.php'; ?>
 
     <div class="container mt-4">
         <h3 class="text-center text-muted">Milk Orders Transaction</h3>
@@ -59,13 +59,13 @@ if ($milkInventoryResult && $milkInventoryResult->num_rows > 0) {
             </div>
         <?php endif; ?>
         
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTransactionModal">New Transaction</button>
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTransactionModal">Add Transaction</button>
         <table class="table mt-4 table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Transaction ID</th>
                     <th>Milk Inventory</th>
-                    <th>Customer Name</th>
+                    <th>Name</th>
                     <th>Type</th>
                     <th>Quantity</th>
                     <th>Date</th>
@@ -85,8 +85,8 @@ if ($milkInventoryResult && $milkInventoryResult->num_rows > 0) {
                             <td><?= htmlspecialchars($row['quantity']) ?> liters</td>
                             <td><?= htmlspecialchars($row['transaction_date']) ?></td>
                             <td>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editTransactionModal<?= $row['transaction_id'] ?>"><i class="fas fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteTransactionModal<?= $row['transaction_id'] ?>"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editTransactionModal<?= $row['transaction_id'] ?>">Edit</button>
+                                <!-- <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteTransactionModal<?= $row['transaction_id'] ?>">Delete</button> -->
                             </td>
                         </tr>
 
@@ -207,14 +207,13 @@ if ($milkInventoryResult && $milkInventoryResult->num_rows > 0) {
                             <input type="text" name="name" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="transaction_type" class="form-label">Transaction Type</label>
-                            <select name="transaction_type" class="form-select" style="width: 30%;" required>
+                            <label for="transaction_type" class="form-label">Transaction Type: </label>
+                            <select name="transaction_type" class="form-select" style="width: 40%;" required>
                                 <option value="order">Order</option>
                                 <option value="restock">Restock</option>
                                 <option value="distributed">Distributed</option>
                             </select>
                         </div>
-
                         <div class="mb-3">
                             <label for="quantity" class="form-label">Quantity (liters)</label>
                             <input type="number" name="quantity" class="form-control" min="0.01" step="0.01" required>

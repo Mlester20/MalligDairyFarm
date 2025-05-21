@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
     <?php include '../components/admin_header.php'; ?>    
 
     <div class="container mt-4">
-        <h4 class="text-center mb-4">Milk Records Analysis</h3>
+        <h4 class="text-center mb-4">Milk Records Analysis</h4>
 
         <div class="dashboard-container">
             <!-- Left panel with graph -->
@@ -45,18 +45,8 @@ if (!isset($_SESSION['user_id'])) {
             <div class="right-panel">
                 <!-- Pie Chart -->
                 <div class="pie-chart-container">
-                    <h5 class="mb-4 text-center">Stock Milk Distribution</h5>
+                    <h5 class="mb-4 text-muted text-center">Total Invent Milk: <?php echo $totalMilk . " Liters"; ?> </h5>
                     <canvas id="pieChart" style="max-height: 200px;"></canvas>
-                    <div class="legend mt-3">
-                        <ul>
-                            <?php foreach ($pieData as $name => $quantity): ?>
-                                <li>
-                                    <span style="background-color: rgba(54, 162, 235, 0.7);"></span>
-                                    <?php echo $name; ?>: <?php echo $quantity; ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
                 </div>
 
                 <!-- Cards Section -->
@@ -93,7 +83,6 @@ if (!isset($_SESSION['user_id'])) {
     <!-- for scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
     <script>
         // Line Chart Data
         const lineChartData = {
@@ -141,15 +130,11 @@ if (!isset($_SESSION['user_id'])) {
 
         // Pie Chart Data
         const pieChartData = {
-            labels: <?php echo json_encode(array_keys($pieData)); ?>,
+            labels: ['Total Milk Inventory'],
             datasets: [{
-                data: <?php echo json_encode(array_values($pieData)); ?>,
+                data: [<?php echo $totalMilk; ?>],
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(75, 192, 112, 0.7)',
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(255, 206, 86, 0.7)',
-                    'rgba(75, 192, 192, 0.7)'
+                    'rgba(54, 162, 235, 0.7)'
                 ],
                 borderWidth: 1
             }]
@@ -165,7 +150,8 @@ if (!isset($_SESSION['user_id'])) {
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false // Hide default legend
+                        display: true,
+                        position: 'top'
                     }
                 }
             }

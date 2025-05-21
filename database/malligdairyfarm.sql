@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2025 at 12:47 PM
+-- Generation Time: May 21, 2025 at 07:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -44,6 +44,27 @@ INSERT INTO `live_stocks` (`id`, `live_stock_name`, `live_stock_code`, `created_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `milk_inventory`
+--
+
+CREATE TABLE `milk_inventory` (
+  `milk_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `quantity` float(5,2) DEFAULT NULL,
+  `recorded_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `milk_inventory`
+--
+
+INSERT INTO `milk_inventory` (`milk_id`, `user_id`, `quantity`, `recorded_date`) VALUES
+(3, 1, 50.00, '2025-05-21 00:00:00'),
+(4, 1, 0.00, '2025-05-21 00:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `milk_records`
 --
 
@@ -61,8 +82,30 @@ CREATE TABLE `milk_records` (
 --
 
 INSERT INTO `milk_records` (`id`, `user_id`, `live_stock_id`, `record_date`, `quantity`, `recorded_at`) VALUES
-(6, 2, 1, '2025-04-04', 25, '2025-04-03'),
+(6, 2, 1, '2025-04-04', 50, '2025-04-03'),
 (7, 2, 1, '2025-05-21', 25, '2025-05-21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaction`
+--
+
+CREATE TABLE `transaction` (
+  `transaction_id` int(11) NOT NULL,
+  `milk_id` int(11) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `transaction_type` enum('order','restock','distributed') NOT NULL,
+  `quantity` float(5,2) DEFAULT NULL,
+  `transaction_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transaction`
+--
+
+INSERT INTO `transaction` (`transaction_id`, `milk_id`, `name`, `transaction_type`, `quantity`, `transaction_date`) VALUES
+(11, 4, 'Jean Dominque Bulusan', 'order', 25.00, '2025-05-22 01:02:00');
 
 -- --------------------------------------------------------
 
@@ -98,12 +141,26 @@ ALTER TABLE `live_stocks`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `milk_inventory`
+--
+ALTER TABLE `milk_inventory`
+  ADD PRIMARY KEY (`milk_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `milk_records`
 --
 ALTER TABLE `milk_records`
   ADD PRIMARY KEY (`id`),
   ADD KEY `live_stock_id` (`live_stock_id`),
   ADD KEY `fk_user_id` (`user_id`);
+
+--
+-- Indexes for table `transaction`
+--
+ALTER TABLE `transaction`
+  ADD PRIMARY KEY (`transaction_id`),
+  ADD KEY `milk_id` (`milk_id`);
 
 --
 -- Indexes for table `users`
@@ -122,10 +179,22 @@ ALTER TABLE `live_stocks`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `milk_inventory`
+--
+ALTER TABLE `milk_inventory`
+  MODIFY `milk_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `milk_records`
 --
 ALTER TABLE `milk_records`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `transaction`
+--
+ALTER TABLE `transaction`
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -138,11 +207,23 @@ ALTER TABLE `users`
 --
 
 --
+-- Constraints for table `milk_inventory`
+--
+ALTER TABLE `milk_inventory`
+  ADD CONSTRAINT `milk_inventory_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `milk_records`
 --
 ALTER TABLE `milk_records`
   ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `milk_records_ibfk_1` FOREIGN KEY (`live_stock_id`) REFERENCES `live_stocks` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `transaction`
+--
+ALTER TABLE `transaction`
+  ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`milk_id`) REFERENCES `milk_inventory` (`milk_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

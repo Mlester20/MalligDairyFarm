@@ -1,42 +1,25 @@
 <?php
-// Fetch data for milk records by livestock
-$query = "
-    SELECT 
-        l.live_stock_name,
-        SUM(r.quantity) AS total_quantity 
-    FROM 
-        milk_records r
-    INNER JOIN 
-        live_stocks l 
-    ON 
-        r.live_stock_id = l.id
-    GROUP BY 
-        l.live_stock_name
-    ORDER BY 
-        total_quantity DESC
-    LIMIT 5
-";
+// Fetch total milk inventory
+$totalMilkQuery = "SELECT SUM(quantity) AS total_quantity FROM milk_inventory";
+$totalMilkResult = $con->query($totalMilkQuery);
 
-$result = $con->query($query);
-
-$pieData = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $pieData[$row['live_stock_name']] = $row['total_quantity'];
-    }
+$totalMilk = 0;
+if ($totalMilkResult->num_rows > 0) {
+    $row = $totalMilkResult->fetch_assoc();
+    $totalMilk = $row['total_quantity'];
 }
 
 // Fetch monthly milk production data
 $monthlyQuery = "
     SELECT 
-        MONTHNAME(record_date) AS month, 
+        MONTHNAME(recorded_date) AS month, 
         SUM(quantity) AS total_quantity 
     FROM 
-        milk_records 
+        milk_inventory 
     GROUP BY 
-        MONTH(record_date)
+        MONTH(recorded_date)
     ORDER BY 
-        MONTH(record_date)
+        MONTH(recorded_date)
 ";
 
 $monthlyResult = $con->query($monthlyQuery);

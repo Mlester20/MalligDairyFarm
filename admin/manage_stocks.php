@@ -44,7 +44,7 @@ $live_stocks = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <?php include '../components/admin_header.php'; ?>
 
     <div class="container mt-5">
-        <h3 class="text-center mb-4 text-muted"><i class="fas fa-magnifying-glass">Manage Live Stocks</i></h3>
+        <h3 class="text-center mb-4 text-muted">Manage Live Stocks</h3>
         <div class="row mb-3">
             <div class="col-md-2">
                 <input type="text" id="searchInput" class="form-control" placeholder="Search Live Stocks...">
