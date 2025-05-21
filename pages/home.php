@@ -214,9 +214,6 @@ if (!isset($_SESSION['user_id'])) {
                                         <button class="btn btn-warning btn-sm edit-btn" data-id="${record.id}" data-bs-toggle="modal" data-bs-target="#editMilkRecordModal">
                                             <i class="fas fa-pen"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${record.id}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             `;

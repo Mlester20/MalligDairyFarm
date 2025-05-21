@@ -14,6 +14,16 @@
                         <i class="fas fa-home"></i> Home
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="transaction.php" class="nav-link">
+                        <i class="fas fa-truck"></i>Transaction Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="inventory.php" class="nav-link">
+                        <i class="fas fa-box"></i>Milk Inventory
+                    </a>
+                </li>
                 <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="entriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-folder me-2"></i>Records

@@ -14,6 +14,11 @@
                         <i class="fas fa-home"></i> Home
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="transaction.php">
+                        <i class="fas fa-truck"></i> Transaction Orders
+                    </a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="entriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-folder"></i> Entries
@@ -22,6 +27,7 @@
                         <li><a class="dropdown-item" href="manage_users.php"><i class="fas fa-users me-2"></i> Manage Users</a></li>
                         <li><a class="dropdown-item" href="records.php"><i class="fas fa-book me-2"></i> Manage Records</a></li>
                         <li><a class="dropdown-item" href="manage_stocks.php"><i class="fas fa-cow me-2"></i> Manage Stocks</a></li>
+                        <li><a class="dropdown-item" href="inventory.php"><i class="fas fa-box me-2"></i> Milk Inventory</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -30,6 +36,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="profile.php"><i class="fas fa-cog"></i> Settings</a></li>
+                        
                         <li><a class="dropdown-item" href="logout.php" onclick="return confirm('Are you sure you want to logout?')">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a></li>

@@ -1,6 +1,6 @@
 <footer class="footer bg-light text-center text-muted py-3">
     <div class="container">
-        <p>Copyright by Mallig Dairy Cooperative Farm | All rights reserved <?= date('Y'); ?> </p>
+        <h6>Copyright by Mallig Dairy Cooperative Farm | All rights reserved <?= date('Y'); ?> </h6>
     </div>
 </footer>
 

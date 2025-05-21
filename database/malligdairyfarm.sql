@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2025 at 09:28 AM
+-- Generation Time: May 21, 2025 at 12:47 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -61,7 +61,8 @@ CREATE TABLE `milk_records` (
 --
 
 INSERT INTO `milk_records` (`id`, `user_id`, `live_stock_id`, `record_date`, `quantity`, `recorded_at`) VALUES
-(6, 2, 1, '2025-04-04', 25, '2025-04-03');
+(6, 2, 1, '2025-04-04', 25, '2025-04-03'),
+(7, 2, 1, '2025-05-21', 25, '2025-05-21');
 
 -- --------------------------------------------------------
 
@@ -84,7 +85,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `name`, `username`, `password`, `created_at`, `role`) VALUES
 (1, 'Mark Lester Raguindin', 'admin', '0192023a7bbd73250516f069df18b500', '2025-04-02 08:16:47', 'admin'),
-(2, 'Benedict Hernando', 'test', '202cb962ac59075b964b07152d234b70', '2025-04-02 00:38:17', 'user');
+(2, 'Jean Dominque Bulusan', 'test', '202cb962ac59075b964b07152d234b70', '2025-04-02 00:38:17', 'user');
 
 --
 -- Indexes for dumped tables
@@ -124,7 +125,7 @@ ALTER TABLE `live_stocks`
 -- AUTO_INCREMENT for table `milk_records`
 --
 ALTER TABLE `milk_records`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
