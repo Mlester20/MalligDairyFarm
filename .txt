@@ -1,0 +1,74 @@
+<script>
+        // Line Chart Data
+        const lineChartData = {
+            labels: <?php echo json_encode($months); ?>, // Dynamic months
+            datasets: [{
+                label: 'Milk Production (Liters)',
+                data: <?php echo json_encode($quantities); ?>, // Dynamic quantities
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 2,
+                tension: 0.4
+            }]
+        };
+
+        // Render Line Chart
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: lineChartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Months'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Liters'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Pie Chart Data
+        const pieChartData = {
+            labels: ['Total Milk Inventory'],
+            datasets: [{
+                data: [<?php echo $totalMilk; ?>],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.7)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Render Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: pieChartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    </script>

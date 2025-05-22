@@ -9,6 +9,17 @@ if ($totalMilkResult->num_rows > 0) {
     $totalMilk = $row['total_quantity'];
 }
 
+//fetch total milk sale
+$totalMilkSale = "SELECT SUM(quantity) as total_milk FROM transaction";
+$totalMilkSaleResult = $con->query($totalMilkSale);
+
+$totalmilkSale = 0;
+if($totalMilkSaleResult->num_rows > 0){
+    $row = $totalMilkSaleResult->fetch_assoc();
+    $totalmilkSale = $row['total_milk'];
+}
+
+
 // Fetch monthly milk production data
 $monthlyQuery = "
     SELECT 

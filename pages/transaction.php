@@ -39,6 +39,7 @@ if ($milkInventoryResult && $milkInventoryResult->num_rows > 0) {
     <link rel="icon" href="../images/favi.png" type="image/png">
 </head>
 <body>
+
     <?php include '../components/header.php'; ?>
 
     <div class="container mt-4">
@@ -85,7 +86,7 @@ if ($milkInventoryResult && $milkInventoryResult->num_rows > 0) {
                             <td><?= htmlspecialchars($row['quantity']) ?> liters</td>
                             <td><?= htmlspecialchars($row['transaction_date']) ?></td>
                             <td>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editTransactionModal<?= $row['transaction_id'] ?>">Edit</button>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editTransactionModal<?= $row['transaction_id'] ?>"><i class="fas fa-pencil"></i></button>
                                 <!-- <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteTransactionModal<?= $row['transaction_id'] ?>">Delete</button> -->
                             </td>
                         </tr>
